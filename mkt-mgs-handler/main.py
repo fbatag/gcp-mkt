@@ -4,9 +4,14 @@ import json
 import pprint
 import traceback
 
-from procurement import Procurement
+from procurement_api import ProcurementAPI
+from account import Account
+from entitlement import Entitlement
 from database import FirestoreDatabase
-   
+
+from utils import get_project_id
+PROJECT_ID = get_project_id()
+
 # Triggered from a message on a Cloud Pub/Sub topic.
 @functions_framework.cloud_event
 def mkt_msg_handler(cloud_event):
@@ -15,18 +20,20 @@ def mkt_msg_handler(cloud_event):
         data = base64.b64decode(cloud_event.data["message"]["data"])
         payload = json.loads(data)
         print("MESSAGE RECEIVED")
-        #print(payload['entitlement']['id'])
-        print(json.dumps(payload, indent=2, ensure_ascii=False))
+        #print(json.dumps(payload, indent=2, ensure_ascii=False))
         pprint.pprint(payload)
+        print(payload)
 
     # Construct a service for the Partner Procurement API.
+        api = ProcurementAPI(provider=PROJECT_ID)
         database = FirestoreDatabase()
-        procurement = Procurement(database)
+        account = Account(api, database)
+        entitlement = Entitlement(api, database)
 
         if 'entitlement' in payload:
-            procurement.handle_entitlement_message(payload['entitlement'], payload['eventType'])
+            entitlement.handle_entitlement_message(payload['entitlement'], payload['eventType'])
         elif 'account' in payload:
-            procurement.handle_account_message(payload['account'])
+            account.handle_account_message(payload['account'])
     except Exception as e:
         print(f"An error occurred: {e}")
         traceback.print_exc()

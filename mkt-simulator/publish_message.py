@@ -1,16 +1,7 @@
-
 # Para rodar, use (não esqueça de criar um python env e instalar as reqs)
 # python3 publish_message.py --type account
 # python3 publish_message.py --type entitlement
 
-{
-  "eventId": "1",
-  "providerId": "partnerdemotest",
-  "account": {
-    "id": "5752973e-25d1",
-    "updateTime": "2026-02-20T15:01:23Z"
-  }
-}
 
 import argparse
 import json
@@ -29,8 +20,10 @@ def publish_message(project_id, topic_id, message_type):
     topic_path = publisher.topic_path(project_id, topic_id)
 
     # Generate a random ID for the test
-    account_id = str(uuid.uuid4())
-    entitlement_id = str(uuid.uuid4())
+    # account_id = str(uuid.uuid4())
+    # entitlement_id = str(uuid.uuid4())
+    account_id = "43076278-f6c6-4b0a-a9c2-c6c2a441cd8e"
+    entitlement_id = "f01bfdac-ca66-478e-8855-1f44c4686551"
 
     payload = {}
 
