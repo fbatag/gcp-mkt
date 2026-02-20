@@ -4,7 +4,6 @@ import json
 import pprint
 import traceback
 
-from googleapiclient.discovery import build
 from procurement import Procurement
 from database import FirestoreDatabase
    
